@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MegaScript
 // @namespace    local.feishu.people.megascript
-// @version      1.0.5
+// @version      1.0.6
 // @description  EnhanceProfile + PokéLark + LeaderChain merged, with dark/light/system theme toggle.
 // @match        https://people.bytedance.net/people/profile*
 // @grant        none
@@ -418,7 +418,7 @@
   }
 
   function getAnimatedSpriteUrl(pokemonId) {
-    return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${pokemonId}.gif`;
+    return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/${pokemonId}.gif`;
   }
   function getFallbackSpriteUrl(pokemonId) {
     return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonId}.png`;
