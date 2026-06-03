@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MegaScript
 // @namespace    local.feishu.people.megascript
-// @version      1.1.0
+// @version      1.1.1
 // @description  EnhanceProfile + PokéLark + LeaderChain merged, with dark/light/system theme toggle.
 // @match        https://people.bytedance.net/people/profile*
 // @grant        none
@@ -229,6 +229,25 @@
           0 24px 60px rgba(0, 0, 0, 0.45),
           0 0 24px rgba(176, 102, 255, 0.6),
           0 0 0 1px rgba(255, 255, 255, 0.18) inset;
+      }
+      .${FRAME_CLASS}[data-tier="shiny"] > img {
+        border: 4px solid transparent !important;
+        background:
+          linear-gradient(#0f1117, #0f1117) padding-box,
+          conic-gradient(from 0deg,
+            #ffd700, #ffffff, #ff9eed, #7afcff, #aaffaa,
+            #fff89e, #ffd700, #ffffff, #ffd700) border-box;
+        animation: feishu-shiny-spin 4s linear infinite;
+        box-shadow:
+          0 24px 60px rgba(0, 0, 0, 0.5),
+          0 0 32px rgba(255, 215, 0, 0.55),
+          0 0 48px rgba(255, 255, 255, 0.25),
+          0 0 0 1px rgba(255, 255, 255, 0.35) inset;
+      }
+      @keyframes feishu-shiny-spin {
+        0%   { filter: hue-rotate(0deg)   brightness(1.05); }
+        50%  { filter: hue-rotate(180deg) brightness(1.2); }
+        100% { filter: hue-rotate(360deg) brightness(1.05); }
       }
       .${FRAME_CLASS}[data-tier="rainbow"] > img {
         border: 4px solid transparent !important;
@@ -1275,7 +1294,8 @@
     const frame = document.querySelector(`.${FRAME_CLASS}`);
     if (!frame) return;
     let tier = "";
-    if (chainLength === 1) tier = "rainbow";
+    if (chainLength === 0) tier = "shiny";
+    else if (chainLength === 1) tier = "rainbow";
     else if (chainLength === 2) tier = "purple";
     else if (chainLength === 3) tier = "blue";
     else if (chainLength === 4) tier = "red";
@@ -1291,6 +1311,7 @@
         <div class="feishu-leader-chart-title">Leader Chain</div>
         <div class="feishu-leader-chart-loading">No direct leader found.</div>
       `;
+      if (isDone) applyAvatarTier(0);
       return;
     }
     const rowHtml = chain.map((person, index) => {
