@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MegaScript
 // @namespace    local.feishu.people.megascript
-// @version      1.0.8
+// @version      1.0.9
 // @description  EnhanceProfile + PokéLark + LeaderChain merged, with dark/light/system theme toggle.
 // @match        https://people.bytedance.net/people/profile*
 // @grant        none
@@ -423,6 +423,9 @@
   function getShowdownAnimatedUrl(pokemonId) {
     return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/${pokemonId}.gif`;
   }
+  function getGenVStaticUrl(pokemonId) {
+    return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/${pokemonId}.png`;
+  }
   function getAnimatedSpriteUrl(pokemonId) {
     return getGenVAnimatedUrl(pokemonId);
   }
@@ -439,7 +442,7 @@
     if (spriteUrlCache.has(pokemonId)) return Promise.resolve(spriteUrlCache.get(pokemonId));
     const candidates = [
       getGenVAnimatedUrl(pokemonId),
-      getShowdownAnimatedUrl(pokemonId),
+      getGenVStaticUrl(pokemonId),
       getFallbackSpriteUrl(pokemonId)
     ];
     return new Promise((resolve) => {
