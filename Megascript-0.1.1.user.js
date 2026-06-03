@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MegaScript
 // @namespace    local.feishu.people.megascript
-// @version      1.0.6
+// @version      1.0.7
 // @description  EnhanceProfile + PokéLark + LeaderChain merged, with dark/light/system theme toggle.
 // @match        https://people.bytedance.net/people/profile*
 // @grant        none
@@ -417,8 +417,14 @@
     return markers.some(m => text.includes(m));
   }
 
-  function getAnimatedSpriteUrl(pokemonId) {
+  function getGenVAnimatedUrl(pokemonId) {
+    return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${pokemonId}.gif`;
+  }
+  function getShowdownAnimatedUrl(pokemonId) {
     return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/${pokemonId}.gif`;
+  }
+  function getAnimatedSpriteUrl(pokemonId) {
+    return getGenVAnimatedUrl(pokemonId);
   }
   function getFallbackSpriteUrl(pokemonId) {
     return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonId}.png`;
@@ -431,10 +437,13 @@
     img.alt = `Pokémon #${pokemonId}`;
     img.title = `Pokémon #${pokemonId}`;
     img.onerror = () => {
-      img.onerror = null;
-      img.src = getFallbackSpriteUrl(pokemonId);
+      img.onerror = () => {
+        img.onerror = null;
+        img.src = getFallbackSpriteUrl(pokemonId);
+      };
+      img.src = getShowdownAnimatedUrl(pokemonId);
     };
-    img.src = getAnimatedSpriteUrl(pokemonId);
+    img.src = getGenVAnimatedUrl(pokemonId);
   }
 
   function readJsonStorage(key, fallback = {}) {
