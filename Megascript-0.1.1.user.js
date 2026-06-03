@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MegaScript
 // @namespace    local.feishu.people.megascript
-// @version      1.0.4
+// @version      1.0.5
 // @description  EnhanceProfile + PokéLark + LeaderChain merged, with dark/light/system theme toggle.
 // @match        https://people.bytedance.net/people/profile*
 // @grant        none
@@ -427,25 +427,14 @@
     return `https://pokeapi.co/api/v2/pokemon/${pokemonId}`;
   }
 
-  const ANIMATED_EXTRA_IDS = new Set([
-    996, 997, 998, 999, 1000, 1005, 1007, 1009, 1011, 1012, 1013, 1018, 1019, 1020, 1021
-  ]);
-
-  function hasAnimatedSprite(pokemonId) {
-    if (pokemonId <= 989) return true;
-    return ANIMATED_EXTRA_IDS.has(pokemonId);
-  }
-
   function setPokemonImage(img, pokemonId) {
     img.alt = `Pokémon #${pokemonId}`;
     img.title = `Pokémon #${pokemonId}`;
-    if (hasAnimatedSprite(pokemonId)) {
-      img.src = getAnimatedSpriteUrl(pokemonId);
-      img.onerror = () => { img.onerror = null; img.src = getFallbackSpriteUrl(pokemonId); };
-    } else {
+    img.onerror = () => {
       img.onerror = null;
       img.src = getFallbackSpriteUrl(pokemonId);
-    }
+    };
+    img.src = getAnimatedSpriteUrl(pokemonId);
   }
 
   function readJsonStorage(key, fallback = {}) {
