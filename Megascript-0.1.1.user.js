@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MegaScript
 // @namespace    local.feishu.people.megascript
-// @version      1.0.3
+// @version      1.0.4
 // @description  EnhanceProfile + PokéLark + LeaderChain merged, with dark/light/system theme toggle.
 // @match        https://people.bytedance.net/people/profile*
 // @grant        none
@@ -428,18 +428,12 @@
   }
 
   const ANIMATED_EXTRA_IDS = new Set([
-    722,725,727,728,729,730,731,732,733,734,735,736,737,738,739,740,742,743,
-    744,745,746,748,749,750,751,752,753,754,755,756,759,760,761,762,764,767,
-    769,770,771,772,774,775,776,777,778,779,780,781,782,783,784,785,786,787,
-    789,790,791,792,793,794,795,796,797,798,800,801,802,804,805,806,807,808,
-    809,811,814,817,818,821,822,824,830,832,833,834,835,837,838,839,840,843,
-    845,846,847,848,849,852,856,858,859,861,862,863,864,866,867,868,870,871,
-    872,873,874,875,876,877,878,880,882,883,885,886,887,888,889,890,895,896,
-    898,899,901,902,904
+    996, 997, 998, 999, 1000, 1005, 1007, 1009, 1011, 1012, 1013, 1018, 1019, 1020, 1021
   ]);
 
   function hasAnimatedSprite(pokemonId) {
-    return pokemonId <= 649 || ANIMATED_EXTRA_IDS.has(pokemonId);
+    if (pokemonId <= 989) return true;
+    return ANIMATED_EXTRA_IDS.has(pokemonId);
   }
 
   function setPokemonImage(img, pokemonId) {
