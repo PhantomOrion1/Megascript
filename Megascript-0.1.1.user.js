@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MegaScript
 // @namespace    local.feishu.people.megascript
-// @version      1.0.1
+// @version      1.0.2
 // @description  EnhanceProfile + PokéLark + LeaderChain merged, with dark/light/system theme toggle.
 // @match        https://people.bytedance.net/people/profile*
 // @grant        none
@@ -16,15 +16,14 @@
   // ============================================================
   // Anonymous daily ping (DAU counter via jsDelivr stats)
   // ============================================================
-  const SCRIPT_VERSION = "1.0.1";
+  const SCRIPT_VERSION = "1.0.2";
   const PING_URL = "https://cdn.jsdelivr.net/gh/PhantomOrion1/Megascript@main/ping.txt";
-  const PING_STORAGE_KEY = "megascript_last_ping_v1";
+  const PING_STORAGE_KEY = "megascript_pinged_v1";
 
   function maybePing() {
-    const today = new Date().toISOString().slice(0, 10);
-    if (localStorage.getItem(PING_STORAGE_KEY) === today) return;
-    localStorage.setItem(PING_STORAGE_KEY, today);
-    fetch(`${PING_URL}?v=${SCRIPT_VERSION}&d=${today}`, {
+    if (localStorage.getItem(PING_STORAGE_KEY)) return;
+    localStorage.setItem(PING_STORAGE_KEY, "1");
+    fetch(`${PING_URL}?v=${SCRIPT_VERSION}`, {
       mode: "no-cors",
       cache: "no-store"
     }).catch(() => {});
