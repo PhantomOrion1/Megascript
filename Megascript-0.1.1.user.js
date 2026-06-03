@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MegaScript
 // @namespace    local.feishu.people.megascript
-// @version      1.0.9
+// @version      1.1.0
 // @description  EnhanceProfile + PokéLark + LeaderChain merged, with dark/light/system theme toggle.
 // @match        https://people.bytedance.net/people/profile*
 // @grant        none
@@ -207,6 +207,44 @@
         transform-style: preserve-3d;
         transition: transform 120ms ease-out, box-shadow 120ms ease-out;
         will-change: transform;
+      }
+
+      .${FRAME_CLASS}[data-tier="red"] > img {
+        border-color: #ff3b3b !important;
+        box-shadow:
+          0 24px 60px rgba(0, 0, 0, 0.45),
+          0 0 24px rgba(255, 59, 59, 0.55),
+          0 0 0 1px rgba(255, 255, 255, 0.18) inset;
+      }
+      .${FRAME_CLASS}[data-tier="blue"] > img {
+        border-color: #3aa0ff !important;
+        box-shadow:
+          0 24px 60px rgba(0, 0, 0, 0.45),
+          0 0 24px rgba(58, 160, 255, 0.55),
+          0 0 0 1px rgba(255, 255, 255, 0.18) inset;
+      }
+      .${FRAME_CLASS}[data-tier="purple"] > img {
+        border-color: #b066ff !important;
+        box-shadow:
+          0 24px 60px rgba(0, 0, 0, 0.45),
+          0 0 24px rgba(176, 102, 255, 0.6),
+          0 0 0 1px rgba(255, 255, 255, 0.18) inset;
+      }
+      .${FRAME_CLASS}[data-tier="rainbow"] > img {
+        border: 4px solid transparent !important;
+        background:
+          linear-gradient(#0f1117, #0f1117) padding-box,
+          linear-gradient(135deg, #ff3b3b, #ffae00, #ffe600, #4dff4d, #3aa0ff, #b066ff, #ff3b9c, #ff3b3b) border-box;
+        background-size: auto, 300% 300%;
+        animation: feishu-rainbow-shift 6s linear infinite;
+        box-shadow:
+          0 24px 60px rgba(0, 0, 0, 0.45),
+          0 0 28px rgba(255, 255, 255, 0.35),
+          0 0 0 1px rgba(255, 255, 255, 0.25) inset;
+      }
+      @keyframes feishu-rainbow-shift {
+        0%   { background-position: 0% 50%, 0% 50%; }
+        100% { background-position: 0% 50%, 300% 50%; }
       }
     `;
     document.head.appendChild(style);
@@ -1233,6 +1271,18 @@
     `;
   }
 
+  function applyAvatarTier(chainLength) {
+    const frame = document.querySelector(`.${FRAME_CLASS}`);
+    if (!frame) return;
+    let tier = "";
+    if (chainLength === 1) tier = "rainbow";
+    else if (chainLength === 2) tier = "purple";
+    else if (chainLength === 3) tier = "blue";
+    else if (chainLength === 4) tier = "red";
+    if (tier) frame.setAttribute("data-tier", tier);
+    else frame.removeAttribute("data-tier");
+  }
+
   function renderChart(chain, isDone = true) {
     const chart = createOrGetChart();
     if (!chart) return;
@@ -1266,6 +1316,7 @@
       <div class="feishu-leader-chart-title">Leader Chain${isDone ? "" : " · loading..."}</div>
       <div class="feishu-leader-chart-row">${rowHtml}</div>
     `;
+    if (isDone) applyAvatarTier(chain.length);
   }
 
   let lastProfileId = null;
