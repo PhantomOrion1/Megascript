@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MegaScript
 // @namespace    local.feishu.people.megascript
-// @version      1.1.1
+// @version      1.1.2
 // @description  EnhanceProfile + PokéLark + LeaderChain merged, with dark/light/system theme toggle.
 // @match        https://people.bytedance.net/people/profile*
 // @grant        none
@@ -898,7 +898,7 @@
             : (entry.profileName || "Unknown person");
           return `
             <div class="pokelark-dex-card" title="${escapeHtml(displayName)}">
-              <img src="${escapeHtml(getAnimatedSpriteUrl(pid))}" alt="Pokémon #${escapeHtml(pid)}">
+              <img class="pokelark-dex-sprite" data-pokemon-id="${escapeHtml(pid)}" alt="Pokémon #${escapeHtml(pid)}">
               <div class="pokelark-dex-number">#${escapeHtml(pid)}</div>
               <div class="pokelark-dex-person" data-pokemon-id="${escapeHtml(pid)}">${escapeHtml(displayName)}</div>
               <div class="pokelark-dex-date">${escapeHtml(formatDate(entry.capturedAt))}</div>
@@ -910,6 +910,10 @@
         }).join("")}
       </div>
     `;
+    body.querySelectorAll(".pokelark-dex-sprite").forEach(img => {
+      const pid = Number(img.getAttribute("data-pokemon-id"));
+      if (Number.isInteger(pid)) setPokemonImage(img, pid);
+    });
     body.querySelectorAll(".pokelark-release-btn").forEach(button => {
       button.addEventListener("click", event => {
         event.preventDefault(); event.stopPropagation();
