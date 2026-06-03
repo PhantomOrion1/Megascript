@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         MegaScript
 // @namespace    local.feishu.people.megascript
-// @version      1.0.0
+// @version      1.0.1
 // @description  EnhanceProfile + PokéLark + LeaderChain merged, with dark/light/system theme toggle.
 // @match        https://people.bytedance.net/people/profile*
 // @grant        none
@@ -12,6 +12,23 @@
 (function () {
   "use strict";
   if (window.top !== window.self) return;
+
+  // ============================================================
+  // Anonymous daily ping (DAU counter via jsDelivr stats)
+  // ============================================================
+  const SCRIPT_VERSION = "1.0.1";
+  const PING_URL = "https://cdn.jsdelivr.net/gh/PhantomOrion1/Megascript@main/ping.txt";
+  const PING_STORAGE_KEY = "megascript_last_ping_v1";
+
+  function maybePing() {
+    const today = new Date().toISOString().slice(0, 10);
+    if (localStorage.getItem(PING_STORAGE_KEY) === today) return;
+    localStorage.setItem(PING_STORAGE_KEY, today);
+    fetch(`${PING_URL}?v=${SCRIPT_VERSION}&d=${today}`, {
+      mode: "no-cors",
+      cache: "no-store"
+    }).catch(() => {});
+  }
 
   // ============================================================
   // Theme manager (dark / light / system)
@@ -1275,6 +1292,7 @@
     watchUrlChanges();
     watchSystemTheme();
     setTimeout(ensureThemeToggle, 1500);
+    maybePing();
   }
 
   if (document.body) boot();
